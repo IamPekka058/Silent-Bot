@@ -2,6 +2,8 @@ import asyncio
 import youtube_dl
 import discord
 
+from Song import Song
+
 
 voulme = 0.5
 
@@ -12,15 +14,15 @@ ytdl_format_options = {
         'extractaudio': True,
         'default_search': 'auto',
         'audioformat': 'mp3',
-        'noplaylist': True,
+        'noplaylist': False,
+        #'continue_dl': True,
+        'postprocessors': [{
+            'key': 'FFmpegExtractAudio',
+            'preferredcodec': 'mp3',
+            'preferredquality': '192', }]
 }
 
-FFMPEG_OPTIONS = {'before_options': '-reconnect 1 -reconnect_streamed 1 -reconnect_delay_max 5','options': '-vn'}
-
-ffmpeg_options = {
-    'options': '-vn',
-    "before_options": "-reconnect 1 -reconnect_streamed 1 -reconnect_delay_max 5"
-}
+FFMPEG_OPTIONS = {'before_options': '-reconnect 4 -reconnect_streamed 4 -reconnect_delay_max 5','options': '-vn'}
 
 ytdl = youtube_dl.YoutubeDL(ytdl_format_options)
 
@@ -32,15 +34,20 @@ class YTDLSource(discord.PCMVolumeTransformer):
         self.url = ""
 
     @classmethod
-    async def from_url(cls, url, stream=True, loop=None):
+    async def from_url(cls, url, loop=None):
         loop = loop or asyncio.get_event_loop()
         info = await loop.run_in_executor(None, lambda: ytdl.extract_info(url, download=False))
-        if ("entries" in info):
-            # TODO Songqueue with skip method 
-            return_val = info['entries'][0]['formats'][0]['url']
+
+        return_list = []
+        if ('entries' in info):
+            url_val = info['entries'][0]['formats'][0]['url']
             title = info['entries'][0]['title']
+            for entrie in info['entries']:
+                return_list.append(Song(entrie['title'], entrie['formats'][0]['url']))
         else:
-            return_val = info.get('formats')[0].get('url')
-            title = info['title']
-        return [return_val, title]
+            url_val = info.get('entries')[0].get('formats')[0].get('url')
+            title = info.get('entries')[0]['title']
+            return_list.append(Song(title, url_val))
+
+        return return_list
 

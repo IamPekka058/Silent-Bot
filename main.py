@@ -29,9 +29,9 @@ async def skipMusic(ctx, skip):
         variables.queue[ctx.guild.id].pop(0)
     if(voice == None):
         await joinVoiceChannel(ctx)
-    result = await music_fetcher.YTDLSource.from_url(variables.queue[ctx.guild.id][0].url, loop=bot.loop)
+    #result = await music_fetcher.YTDLSource.from_url(variables.queue[ctx.guild.id][0].url, loop=bot.loop)
     global audio
-    tmp_audio = discord.FFmpegPCMAudio(result[0], executable="ffmpeg.exe")
+    tmp_audio = discord.FFmpegPCMAudio(variables.queue[ctx.guild.id][0].url, executable="ffmpeg.exe")
     audio = discord.PCMVolumeTransformer(tmp_audio, volume=music_fetcher.voulme)
     voice.stop()
     voice.play(audio)
@@ -90,21 +90,22 @@ async def playMusic(ctx, *args):
         for arg in args:
             url += arg+" "
 
-        result = await music_fetcher.YTDLSource.from_url(url)
-
         voice = ctx.guild.voice_client
-        functions.addSongToQueue(ctx.guild, Song(result[1], result[0]))
+        results = await music_fetcher.YTDLSource.from_url(url)
+        for result in results:
+            functions.addSongToQueue(ctx.guild, Song(result.title, result.url))
         if(voice.is_playing()):
-            await ctx.send("**{}** wurde der Warteschlange ⏳ hinzugefügt.".format(result[1]))
+            await ctx.send("**{}** Songs wurden der Warteschlange ⏳ hinzugefügt.".format(len(results)))
         else:
-            result = await music_fetcher.YTDLSource.from_url(variables.queue[ctx.guild.id][0].url, loop=bot.loop)
+            await ctx.send("**{}** Songs wurde/n gefunden. 🔍".format(len(results)))
+            #results = await music_fetcher.YTDLSource.from_url(variables.queue[ctx.guild.id][0].url, loop=bot.loop)
             global audio
-            tmp_audio = discord.FFmpegPCMAudio(result[0], executable="ffmpeg.exe")
+            tmp_audio = discord.FFmpegPCMAudio(results[0].url, executable="ffmpeg.exe")
             global currently_playing
             currently_playing = variables.queue[ctx.guild.id].pop(0)
             audio = discord.PCMVolumeTransformer(tmp_audio, volume=music_fetcher.voulme)
             voice.play(audio)
-            await ctx.send('**{}** wird abgespielt. 🎶'.format(result[1]))
+            await ctx.send('**{}** wird abgespielt. 🎶'.format(currently_playing.title))
 
     except youtube_dl.DownloadError as err:
         await ctx.send("ERROR -> "+str(err.args))
@@ -114,10 +115,10 @@ async def getQueue(ctx):
     queue = variables.queue[ctx.guild.id]
     msg = ""
     for song in queue:
-        msg += song.title+"\n\t"
+        msg += "\n\u200b\u200b\u200b"+song.title+"\n"
     cp = 0
     if(currently_playing != None): cp = 1
-    embed = discord.Embed(title="Warteschlange  ⏳  [{} Songs]".format(len(queue)+cp), description="▶\t"+currently_playing.title+" \n\t"+msg, color=0xa000a0)
+    embed = discord.Embed(title="Warteschlange  ⏳  [{} Songs]".format(len(queue)+cp), description="▶ "+currently_playing.title+" \n"+msg, color=0xa000a0)
     await ctx.send(embed = embed)
 
 @bot.command(name="skip")
