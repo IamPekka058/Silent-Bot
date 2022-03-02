@@ -1,3 +1,5 @@
+from flask import Flask, render_template
+import threading
 from Song import Song
 import variables
 import functions
@@ -6,22 +8,25 @@ import discord
 from discord.ext import commands
 import youtube_dl
 import music_fetcher
+import oauth
 
 PREFIX = "!"
 DISCORD_TOKEN = "OTQ1Nzg1NDMyMDk5MTM1NTc5.YhVNUg.XiCBYubgrsXt41X9-ZqJ3f7Attc"
 
+currently_playing = None
+
+audio = None
+
+intents = discord.Intents().default()
+client = discord.Client(intents=intents)
+bot = commands.Bot(command_prefix=PREFIX,intents=intents)
 
 #                       #
 #         INIT          #
 #                       # 
-
-print("Bot wird initialisiert...")
-intents = discord.Intents().default()
-client = discord.Client(intents=intents)
-bot = commands.Bot(command_prefix=PREFIX,intents=intents)
-currently_playing = None
-
-audio = None
+def startBot():
+    print("Bot wird initialisiert...")
+    bot.run(DISCORD_TOKEN)
 
 async def skipMusic(ctx, skip):
     voice = ctx.guild.voice_client
@@ -95,7 +100,7 @@ async def playMusic(ctx, *args):
         for result in results:
             functions.addSongToQueue(ctx.guild, Song(result.title, result.url))
         if(voice.is_playing()):
-            await ctx.send("**{}** Songs wurden der Warteschlange ⏳ hinzugefügt.".format(len(results)))
+            await ctx.send("**{}** Song/s wurde/n der Warteschlange ⏳ hinzugefügt.".format(len(results)))
         else:
             await ctx.send("**{}** Songs wurde/n gefunden. 🔍".format(len(results)))
             #results = await music_fetcher.YTDLSource.from_url(variables.queue[ctx.guild.id][0].url, loop=bot.loop)
@@ -181,7 +186,22 @@ async def clear(ctx, amount = None):
     
 
 print("Discord Bot wird gestartet...")
+def runWebsite():
+    app = Flask("__main__")
 
-bot.run(DISCORD_TOKEN)
+    @app.route('/')
+    def index():
+        return render_template("index.html", discord_url = oauth.OAuth.discord_login_url)
+    @app.route("/login")
+    def login():
+        return("Success")
+
+    app.run()
+
+website_thread = threading.Thread(target=runWebsite)
+website_thread.start()
+
+bot_thread = threading.Thread(target=startBot)
+bot_thread.start()
 
         
