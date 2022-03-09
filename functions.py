@@ -1,5 +1,3 @@
-from main import queue
-
 def hasRole(role, user):
     if(user.hasPermission()):
         return True
