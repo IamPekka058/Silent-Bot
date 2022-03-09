@@ -1,21 +1,17 @@
-from flask import Flask, render_template
 import threading
-from Song import Song
-import variables
+from objects.Song import Song
 import functions
+from modules.music.QueueMananger import QueueMananger
 import jsonHandler
 import discord
 from discord.ext import commands
 import youtube_dl
-import music_fetcher
-import oauth
-from webservice import webservice
+import modules.music.MusicFetcher as MusicFetcher
+import resources.oauth as oauth
+from modules.webservice import webservice
 
-PREFIX = "!"
-DISCORD_TOKEN = "OTQ1Nzg1NDMyMDk5MTM1NTc5.YhVNUg.khv1aPjDoTtTsp5cWSmPJ3HN7mQ"
-FFMPEG_OPTIONS = {'before_options': '-reconnect 4 -reconnect_streamed 4 -reconnect_delay_max 5',
-#'options': '-vn',
- "verbose":"True"}
+PREFIX = jsonHandler.fetchDataFromJson()['prefix']
+DISCORD_TOKEN = jsonHandler.fetchDataFromJson()['token']
 
 currently_playing = None
 
@@ -37,18 +33,18 @@ def startBot():
 async def skipMusic(ctx, skip):
     voice = ctx.guild.voice_client
     for i in range(1, skip):
-        variables.queue[ctx.guild.id].pop(0)
+        QueueMananger().removeSongFromQueue(ctx.guild.id)
     if(voice == None):
         await joinVoiceChannel(ctx)
     #result = await music_fetcher.YTDLSource.from_url(variables.queue[ctx.guild.id][0].url, loop=bot.loop)
     global audio
-    tmp_audio = discord.FFmpegPCMAudio(variables.queue[ctx.guild.id][0].url, executable="ffmpeg.exe")
-    audio = discord.PCMVolumeTransformer(tmp_audio, volume=music_fetcher.voulme)
+    tmp_audio = discord.FFmpegPCMAudio(QueueMananger().getQueue()[ctx.guild.id][0].url, executable="resources/ffmpeg.exe")
+    audio = discord.PCMVolumeTransformer(tmp_audio, volume=MusicFetcher.voulme)
     voice.stop()
     voice.play(audio)
-    await ctx.send('**{}** wird abgespielt. 🎶'.format(variables.queue[ctx.guild.id][0].title))
+    await ctx.send('**{}** wird abgespielt. 🎶'.format(QueueMananger().getQueue()[ctx.guild.id][0].title))
     global currently_playing
-    currently_playing = variables.queue[ctx.guild.id].pop(0)
+    currently_playing = QueueMananger.removeSongFromQueue(ctx.guild.id)
 
 #                       #
 #       COMMANDS        #
@@ -81,7 +77,7 @@ async def changeVolume(ctx, volume):
         voice = ctx.guild.voice_client
         if(float(volume) >= 1):
             volume_=float(float(volume)/100)
-        music_fetcher.voulme = volume_
+        MusicFetcher.voulme = volume_
 
         audio.volume = volume_
         if(voice.is_playing()):
@@ -102,9 +98,9 @@ async def playMusic(ctx, *args):
             url += arg+" "
 
         voice = ctx.guild.voice_client
-        results = await music_fetcher.YTDLSource.from_url(url)
+        results = await MusicFetcher.YTDLSource.from_url(url)
         for result in results:
-            functions.addSongToQueue(ctx.guild, Song(result.title, result.url))
+            QueueMananger.addSongToQueue(ctx.guild, Song(result.title, result.url))
         if(voice.is_playing()):
             await ctx.send("**{}** Song/s wurde/n der Warteschlange ⏳ hinzugefügt.".format(len(results)))
         else:
@@ -113,8 +109,8 @@ async def playMusic(ctx, *args):
             global audio
             tmp_audio = discord.FFmpegPCMAudio(results[0].url, executable="ffmpeg.exe", options='-vn',)# before_options='-reconnect 4 -reconnect_streamed 4 -reconnect_delay_max 5')
             global currently_playing
-            currently_playing = variables.queue[ctx.guild.id].pop(0)
-            audio = discord.PCMVolumeTransformer(tmp_audio, volume=music_fetcher.voulme)
+            currently_playing = QueueMananger().getQueue()[ctx.guild.id].pop(0)
+            audio = discord.PCMVolumeTransformer(tmp_audio, volume=MusicFetcher.voulme)
             voice.play(audio)
             await ctx.send('**{}** wird abgespielt. 🎶'.format(currently_playing.title))
 
@@ -123,7 +119,7 @@ async def playMusic(ctx, *args):
 
 @bot.command(name="queue")
 async def getQueue(ctx):
-    queue = variables.queue[ctx.guild.id]
+    queue = QueueMananger().getQueue()[ctx.guild.id]
     msg = ""
     for song in queue:
         msg += "\n\u200b\u200b\u200b"+song.title+"\n"
@@ -174,7 +170,7 @@ async def stopBot(ctx):
 @bot.command("daily")
 async def daily(ctx):
     daily_url = jsonHandler.fetchDataFromJson()['daily_url']
-    result = await music_fetcher.YTDLSource.from_url(daily_url)
+    result = await MusicFetcher.YTDLSource.from_url(daily_url)
     await ctx.send("📅 Heutige Songempfehlung 🎶 -> **{}** <- 😀".format(result[1]))
     await playMusic(ctx, daily_url)
 
