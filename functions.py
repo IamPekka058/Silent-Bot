@@ -1,22 +1,4 @@
-import variables
-
-def addSongToQueue(guild, song):
-    id = guild.id
-    #Check if a queue exists for guild
-    try: 
-        songs = variables.queue[id]
-        
-        #If queue exists for guild -> Add song
-        songs.append(song)
-
-    except KeyError as err:
-
-        #Create queue for guild
-        variables.queue[id] = [song]
-
-    list_items = []
-    for item in variables.queue[id]:
-        list_items.append(item.title)
+from main import queue
 
 def hasRole(role, user):
     if(user.hasPermission()):
