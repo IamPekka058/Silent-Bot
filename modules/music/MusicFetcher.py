@@ -2,7 +2,7 @@ import asyncio
 import youtube_dl
 import discord
 import json
-from Song import Song
+from objects.Song import Song
 import Converter
 
 
@@ -23,8 +23,6 @@ ytdl_format_options = {
             'preferredcodec': 'mp3',
             'preferredquality': '192', }]
 }
-
-FFMPEG_OPTIONS = {'before_options': '-reconnect 4 -reconnect_streamed 4 -reconnect_delay_max 5','options': '-vn'}
 
 ytdl = youtube_dl.YoutubeDL(ytdl_format_options)
 

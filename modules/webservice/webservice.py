@@ -1,7 +1,7 @@
 from flask import Flask, render_template
-import oauth
+import resources.oauth as oauth
 
-app = Flask("__main__")
+app = Flask("__main__", template_folder="/templates/")
 
 def initWebsite():
     @app.route('/')
