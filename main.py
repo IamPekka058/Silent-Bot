@@ -9,9 +9,13 @@ from discord.ext import commands
 import youtube_dl
 import music_fetcher
 import oauth
+from webservice import webservice
 
 PREFIX = "!"
-DISCORD_TOKEN = "OTQ1Nzg1NDMyMDk5MTM1NTc5.YhVNUg.XiCBYubgrsXt41X9-ZqJ3f7Attc"
+DISCORD_TOKEN = "OTQ1Nzg1NDMyMDk5MTM1NTc5.YhVNUg.khv1aPjDoTtTsp5cWSmPJ3HN7mQ"
+FFMPEG_OPTIONS = {'before_options': '-reconnect 4 -reconnect_streamed 4 -reconnect_delay_max 5',
+#'options': '-vn',
+ "verbose":"True"}
 
 currently_playing = None
 
@@ -25,7 +29,9 @@ bot = commands.Bot(command_prefix=PREFIX,intents=intents)
 #         INIT          #
 #                       # 
 def startBot():
-    print("Bot wird initialisiert...")
+    print("Bot startet...")
+    global bot
+    bot = commands.Bot(command_prefix=PREFIX,intents=intents)
     bot.run(DISCORD_TOKEN)
 
 async def skipMusic(ctx, skip):
@@ -67,7 +73,7 @@ async def leaveVoiceChannel(ctx):
         voice_channel = server.voice_client
         await voice_channel.disconnect()
     else:
-        print("Ist in keinem Voicechat")
+        print("Der Bot ist in keinem Sprachkanal")
 
 @bot.command(name="volume", description="Ändere die Lautstärke des Bots für alle.")
 async def changeVolume(ctx, volume):
@@ -105,7 +111,7 @@ async def playMusic(ctx, *args):
             await ctx.send("**{}** Songs wurde/n gefunden. 🔍".format(len(results)))
             #results = await music_fetcher.YTDLSource.from_url(variables.queue[ctx.guild.id][0].url, loop=bot.loop)
             global audio
-            tmp_audio = discord.FFmpegPCMAudio(results[0].url, executable="ffmpeg.exe")
+            tmp_audio = discord.FFmpegPCMAudio(results[0].url, executable="ffmpeg.exe", options='-vn',)# before_options='-reconnect 4 -reconnect_streamed 4 -reconnect_delay_max 5')
             global currently_playing
             currently_playing = variables.queue[ctx.guild.id].pop(0)
             audio = discord.PCMVolumeTransformer(tmp_audio, volume=music_fetcher.voulme)
@@ -186,22 +192,11 @@ async def clear(ctx, amount = None):
     
 
 print("Discord Bot wird gestartet...")
-def runWebsite():
-    app = Flask("__main__")
 
-    @app.route('/')
-    def index():
-        return render_template("index.html", discord_url = oauth.OAuth.discord_login_url)
-    @app.route("/login")
-    def login():
-        return("Success")
-
-    app.run()
-
-website_thread = threading.Thread(target=runWebsite)
+website_thread = threading.Thread(target=webservice.runWebsite)
 website_thread.start()
 
-bot_thread = threading.Thread(target=startBot)
-bot_thread.start()
-
+#bot_thread = threading.Thread(target=startBot)
+#bot_thread.start()
+bot.run(DISCORD_TOKEN)
         

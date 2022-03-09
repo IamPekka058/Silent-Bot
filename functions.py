@@ -17,7 +17,6 @@ def addSongToQueue(guild, song):
     list_items = []
     for item in variables.queue[id]:
         list_items.append(item.title)
-    print("[QUEUE] " + str(id)+" -> " + str(list_items))
 
 def hasRole(role, user):
     if(user.hasPermission()):

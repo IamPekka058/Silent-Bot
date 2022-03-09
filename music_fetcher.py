@@ -1,8 +1,9 @@
 import asyncio
 import youtube_dl
 import discord
-
+import json
 from Song import Song
+import Converter
 
 
 voulme = 0.5
@@ -10,12 +11,13 @@ voulme = 0.5
 youtube_dl.utils.bug_reports_message = lambda: ''
 
 ytdl_format_options = {
-        'format': 'bestaudio/best',
+        'format': 'bestaudio',
         'extractaudio': True,
         'default_search': 'auto',
         'audioformat': 'mp3',
         'noplaylist': False,
-        #'continue_dl': True,
+        'playlistend': 25,
+        'verbose': True,
         'postprocessors': [{
             'key': 'FFmpegExtractAudio',
             'preferredcodec': 'mp3',
@@ -25,6 +27,8 @@ ytdl_format_options = {
 FFMPEG_OPTIONS = {'before_options': '-reconnect 4 -reconnect_streamed 4 -reconnect_delay_max 5','options': '-vn'}
 
 ytdl = youtube_dl.YoutubeDL(ytdl_format_options)
+
+
 
 class YTDLSource(discord.PCMVolumeTransformer):
     def __init__(self, source, *, data, volume=voulme):
@@ -39,15 +43,22 @@ class YTDLSource(discord.PCMVolumeTransformer):
         info = await loop.run_in_executor(None, lambda: ytdl.extract_info(url, download=False))
 
         return_list = []
-        if ('entries' in info):
-            url_val = info['entries'][0]['formats'][0]['url']
-            title = info['entries'][0]['title']
+        if (Converter.isPlaylist(info)):
             for entrie in info['entries']:
-                return_list.append(Song(entrie['title'], entrie['formats'][0]['url']))
+                return_list.append(Song(entrie['title'], Converter.getUrl(entrie)))
+            with open("temp_list.txt", "w") as file:
+                file.write(json.dumps(info))
+                file.flush()
+                file.close()
         else:
-            url_val = info.get('entries')[0].get('formats')[0].get('url')
-            title = info.get('entries')[0]['title']
+            with open("temp.txt", "w") as file:
+                file.write(json.dumps(info))
+                file.flush()
+                file.close()
+            url_val = info['formats'][0]['url']
+            title = info['title']
             return_list.append(Song(title, url_val))
+            print("Song hinzugefügt")
 
         return return_list
 
