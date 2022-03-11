@@ -1,4 +1,5 @@
 # Silent-Bot
+
 Silent-Bot is an open source Discord-Bot.
 
 
@@ -14,9 +15,11 @@ Silent-Bot is an open source Discord-Bot.
 ## Information
 You'll have to host the bot on your own!
 
-#### Supported OS
+### Supported OS
 
 | Windows |   ✅ |
 |---------|----:|
 | Linux   | :x: |
 | MacOS   | :x: |
+
+
