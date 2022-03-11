@@ -19,8 +19,8 @@ class QueueMananger():
         for item in queue[id]:
             list_items.append(item.title)
     
-    def removeSongFromQueue(guild_id):
-        return queue.pop(0)
+    def removeSongFromQueue(self, guild_id):
+        return queue[guild_id].pop(0)
 
     def getQueue():
         return queue

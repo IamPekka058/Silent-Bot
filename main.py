@@ -8,7 +8,8 @@ from discord.ext import commands
 import youtube_dl
 import modules.music.MusicFetcher as MusicFetcher
 import resources.oauth as oauth
-from modules.webservice import webservice
+import modules
+import asyncio
 
 PREFIX = jsonHandler.fetchDataFromJson()['prefix']
 DISCORD_TOKEN = jsonHandler.fetchDataFromJson()['token']
@@ -107,12 +108,15 @@ async def playMusic(ctx, *args):
             await ctx.send("**{}** Songs wurde/n gefunden. 🔍".format(len(results)))
             #results = await music_fetcher.YTDLSource.from_url(variables.queue[ctx.guild.id][0].url, loop=bot.loop)
             global audio
-            tmp_audio = discord.FFmpegPCMAudio(results[0].url, executable="ffmpeg.exe", options='-vn',)# before_options='-reconnect 4 -reconnect_streamed 4 -reconnect_delay_max 5')
+            tmp_audio = discord.FFmpegPCMAudio(results[0].url, executable="resources/ffmpeg.exe", options='-vn',)# before_options='-reconnect 4 -reconnect_streamed 4 -reconnect_delay_max 5')
             global currently_playing
-            currently_playing = QueueMananger().getQueue()[ctx.guild.id].pop(0)
+            id = ctx.guild.id
+            currently_playing = QueueMananger().removeSongFromQueue(id)
             audio = discord.PCMVolumeTransformer(tmp_audio, volume=MusicFetcher.voulme)
             voice.play(audio)
             await ctx.send('**{}** wird abgespielt. 🎶'.format(currently_playing.title))
+            while(voice.is_playing()):
+                await asyncio.sleep(1)
 
     except youtube_dl.DownloadError as err:
         await ctx.send("ERROR -> "+str(err.args))
@@ -171,7 +175,7 @@ async def stopBot(ctx):
 async def daily(ctx):
     daily_url = jsonHandler.fetchDataFromJson()['daily_url']
     result = await MusicFetcher.YTDLSource.from_url(daily_url)
-    await ctx.send("📅 Heutige Songempfehlung 🎶 -> **{}** <- 😀".format(result[1]))
+    await ctx.send("📅 Heutige Songempfehlung 🎶 -> **{}** <- 😀".format(result[0].getTitle()))
     await playMusic(ctx, daily_url)
 
 @bot.command("clear")
@@ -192,7 +196,7 @@ print("Discord Bot wird gestartet...")
 if(jsonHandler.fetchDataFromJson()['use_webservice'] == "True"):
 
     print("Webservice wird gestartet...")
-    website_thread = threading.Thread(target=webservice.runWebsite)
+    website_thread = threading.Thread(target=modules.webservice.runWebsite)
     website_thread.start()
 
 bot.run(DISCORD_TOKEN)

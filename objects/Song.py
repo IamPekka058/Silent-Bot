@@ -5,3 +5,9 @@ class Song(object):
         
     def toList(self):
         return [self.title, self.url]
+
+    def getUrl(self):
+        return self.url
+    
+    def getTitle(self):
+        return self.title
