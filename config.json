@@ -1,5 +1,6 @@
 {   
     "token" : "YOUR_TOKEN",
     "prefix" : "!",
-    "daily_url" : "https://youtu.be/_Ci0Kgdpgsw"
+    "daily_url" : "https://youtu.be/_Ci0Kgdpgsw",
+    "use_webservice" : "False"
 }

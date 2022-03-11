@@ -1,6 +1,3 @@
-from tkinter import E
-
-
 def isPlaylist(dict):
     try:
         if(dict['_type'] == 'playlist'): return True
