@@ -189,10 +189,11 @@ async def clear(ctx, amount = None):
 
 print("Discord Bot wird gestartet...")
 
-website_thread = threading.Thread(target=webservice.runWebsite)
-website_thread.start()
+if(jsonHandler.fetchDataFromJson()['use_webservice'] == "True"):
 
-#bot_thread = threading.Thread(target=startBot)
-#bot_thread.start()
+    print("Webservice wird gestartet...")
+    website_thread = threading.Thread(target=webservice.runWebsite)
+    website_thread.start()
+
 bot.run(DISCORD_TOKEN)
         
