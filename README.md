@@ -1,6 +1,11 @@
 # Silent-Bot
 
-Ein opensource Discord-Bot.
+## Setup
 
-Mehr gibts gerade nicht zu sagen...
- 
+### Supported OS
+
+| Windows |   ✅ |
+|---------|----:|
+| Linux   | :x: |
+| MacOS   | :x: |
+
