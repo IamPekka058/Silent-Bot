@@ -12,6 +12,9 @@ Silent-Bot is an open source Discord-Bot.
 
 4. Run ```python main.py```
 
+## Webservice
+You can enbale the webservice in the config.json. The Webservice is by default disabled.
+
 ## Information
 You'll have to host the bot on your own!
 
