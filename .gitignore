@@ -6,6 +6,8 @@
 #Custom
 logs/*
 
+!logs/.placeholder
+
 # User-specific files
 *.rsuser
 *.suo
