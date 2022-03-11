@@ -4,9 +4,8 @@ import discord
 import json
 from objects.Song import Song
 import Converter
+from main import volume
 
-
-voulme = 0.5
 
 youtube_dl.utils.bug_reports_message = lambda: ''
 
@@ -29,7 +28,7 @@ ytdl = youtube_dl.YoutubeDL(ytdl_format_options)
 
 
 class YTDLSource(discord.PCMVolumeTransformer):
-    def __init__(self, source, *, data, volume=voulme):
+    def __init__(self, source, *, data, volume=volume):
         super().__init__(source, volume)
         self.data = data
         self.title = data.get('title')
