@@ -1,4 +1,7 @@
-import threading
+from click import echo
+from modules.logger import logger
+import multiprocessing
+from tracemalloc import start
 from objects.Song import Song
 import functions
 from modules.music.QueueMananger import QueueMananger
@@ -31,6 +34,14 @@ def getAudio():
 def getCurrentylPlaying():
     return currently_playing
 
+
+@bot.event
+async def on_message(message):
+    try:
+        logger.log(3, str(message.author)+" -> "+str(message.content))
+        await bot.process_commands(message)
+    except:
+        print("Error")
 #                       #
 #    Load Extensions    #
 #                       # 
@@ -46,11 +57,30 @@ bot.load_extension("modules.commands.stop_command")
 bot.load_extension("modules.commands.exit_command")
 bot.load_extension("modules.commands.daily_command")
 
+def startBot():
+    logger.log(2, "Bot wurde gestartet")
+    bot.run(DISCORD_TOKEN)
+
 if __name__ == '__main__':
     if(jsonHandler.fetchDataFromJson()['use_webservice'] == "True"):
         print("Webservice wird gestartet...")
-        website_thread = threading.Thread(target=webservice.runWebsite)
-        website_thread.start()
+        website_process = proc = multiprocessing.Process(target=webservice.runWebsite)
+        website_process.start()
 
-    bot.run(DISCORD_TOKEN)
-        
+    bot_process = proc = multiprocessing.Process(target=startBot)
+    bot_process.start()
+    #bot.run(DISCORD_TOKEN)
+    print("Bot gestartet...")
+    print("Now listening to commands...")
+    while(True):
+        cmd = input("")
+        if(cmd == "stop bot"):
+            bot_process.terminate()
+            print("Bot closed.")
+        if(cmd == "exit"):
+            print("Now exiting this process...")
+            exit() 
+        if(cmd == "start bot"):
+            bot_process = proc = multiprocessing.Process(target=startBot)
+            bot_process.start() 
+            print("Bot started.")

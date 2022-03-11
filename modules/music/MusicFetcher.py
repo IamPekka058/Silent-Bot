@@ -16,7 +16,7 @@ ytdl_format_options = {
         'audioformat': 'mp3',
         'noplaylist': False,
         'playlistend': 25,
-        'verbose': True,
+        'verbose': False,
         'postprocessors': [{
             'key': 'FFmpegExtractAudio',
             'preferredcodec': 'mp3',

@@ -1,6 +1,6 @@
 from discord.ext import commands
 from modules.json import jsonHandler
-from play_command import playSong
+from modules.commands.play_command import playSong
 from modules.music import MusicFetcher
 
 @commands.command("daily")

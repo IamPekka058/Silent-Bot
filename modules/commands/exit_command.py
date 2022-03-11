@@ -1,5 +1,5 @@
 from discord.ext import commands
-from stop_command import stopMusic
+from modules.commands.stop_command import stopMusic
 from main import bot
 
 @commands.command(name="exit")
