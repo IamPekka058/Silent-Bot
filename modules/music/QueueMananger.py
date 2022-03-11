@@ -22,5 +22,5 @@ class QueueMananger():
     def removeSongFromQueue(self, guild_id):
         return queue[guild_id].pop(0)
 
-    def getQueue():
+    def getQueue(self):
         return queue

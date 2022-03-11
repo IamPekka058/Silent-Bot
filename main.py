@@ -9,7 +9,6 @@ import youtube_dl
 import modules.music.MusicFetcher as MusicFetcher
 import resources.oauth as oauth
 import modules
-import asyncio
 
 PREFIX = jsonHandler.fetchDataFromJson()['prefix']
 DISCORD_TOKEN = jsonHandler.fetchDataFromJson()['token']
@@ -90,7 +89,8 @@ async def changeVolume(ctx, volume):
 
 @bot.command(name="play", desciption="Spiele Musik von YouTube")
 async def playMusic(ctx, *args):
-    voice = ctx.guild.voice_client
+    #voice = ctx.guild.voice_client
+    voice: discord.VoiceClient = discord.utils.get(bot.voice_clients, guild=ctx.guild)
     if(voice == None):
         await joinVoiceChannel(ctx)
     try:
@@ -108,15 +108,12 @@ async def playMusic(ctx, *args):
             await ctx.send("**{}** Songs wurde/n gefunden. 🔍".format(len(results)))
             #results = await music_fetcher.YTDLSource.from_url(variables.queue[ctx.guild.id][0].url, loop=bot.loop)
             global audio
-            tmp_audio = discord.FFmpegPCMAudio(results[0].url, executable="resources/ffmpeg.exe", options='-vn',)# before_options='-reconnect 4 -reconnect_streamed 4 -reconnect_delay_max 5')
             global currently_playing
             id = ctx.guild.id
             currently_playing = QueueMananger().removeSongFromQueue(id)
-            audio = discord.PCMVolumeTransformer(tmp_audio, volume=MusicFetcher.voulme)
-            voice.play(audio)
+            audio = discord.PCMVolumeTransformer(discord.FFmpegPCMAudio(results[0].url, executable="resources/ffmpeg.exe", options='-vn',), volume=MusicFetcher.voulme)
+            voice.play(source=audio, after=None)
             await ctx.send('**{}** wird abgespielt. 🎶'.format(currently_playing.title))
-            while(voice.is_playing()):
-                await asyncio.sleep(1)
 
     except youtube_dl.DownloadError as err:
         await ctx.send("ERROR -> "+str(err.args))
