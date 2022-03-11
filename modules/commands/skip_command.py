@@ -1,4 +1,5 @@
 from discord.ext import commands
+import discord
 from main import PREFIX, audio
 import functions
 from modules.music import QueueMananger, MusicFetcher
