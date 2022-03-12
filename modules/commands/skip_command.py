@@ -1,6 +1,6 @@
 from discord.ext import commands
 import discord
-from main import PREFIX, audio, getAudio
+from main import PREFIX, audio, getAudio, setCurrentlyPlaying
 import functions
 from modules.music import MusicFetcher
 from modules.music.QueueMananger import QueueMananger
@@ -27,8 +27,7 @@ async def skipSong(ctx, amount=1):
     voice.play(audio)
     await ctx.send('**{}** wird abgespielt. 🎶'.format(QueueMananger().getQueue()[ctx.guild.id][0].title))
     
-    global currently_playing
-    currently_playing = QueueMananger.removeSongFromQueue(ctx.guild.id)
+    setCurrentlyPlaying(QueueMananger().removeSongFromQueue(ctx.guild.id))
 
 def setup(bot):
     bot.add_command(skipSong)

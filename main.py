@@ -1,3 +1,4 @@
+from glob import glob
 from click import echo
 from modules.logger import logger
 import multiprocessing
@@ -18,7 +19,7 @@ DISCORD_TOKEN = jsonHandler.fetchDataFromJson()['token']
 
 currently_playing = None
 audio = None
-volume = 0.5
+volume = 0.05
 
 intents = discord.Intents().default()
 client = discord.Client(intents=intents)
@@ -31,8 +32,12 @@ def setAudio(newAudio):
 def getAudio():
     return audio
 
-def getCurrentylPlaying():
+def getCurrentlyPlaying():
     return currently_playing
+
+def setCurrentlyPlaying(playing):
+    global currently_playing
+    currently_playing = playing
 
 
 @bot.event
