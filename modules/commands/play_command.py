@@ -32,7 +32,7 @@ async def playSong(ctx, *args):
             #global currently_playing
             id = ctx.guild.id
             main.currently_playing = QueueMananger().removeSongFromQueue(id)
-            main.setAudio(discord.PCMVolumeTransformer(discord.FFmpegPCMAudio(results[0].url, executable="resources/ffmpeg.exe", options='-vn',), volume=main.volume))
+            main.setAudio(discord.PCMVolumeTransformer(discord.FFmpegPCMAudio(results[0].url, executable="ffmpeg", options='-vn',), volume=main.volume))
             voice.play(source=main.getAudio())
             await ctx.send('**{}** wird abgespielt. 🎶'.format(main.currently_playing.title))
 
