@@ -1,6 +1,7 @@
 from discord.ext import commands
 import discord
 import youtube_dl
+from modules.logger import logger
 from modules.commands.join_command import joinVoiceChannel
 from modules.music import MusicFetcher
 from modules.music.QueueMananger import QueueMananger
@@ -9,6 +10,7 @@ import main
 
 @commands.command(name="play", desciption="Spiele Musik von YouTube")
 async def playSong(ctx, *args):
+    logger.log(2, "Song wird abgespielt")
     voice = ctx.guild.voice_client
     if(voice == None):
         await joinVoiceChannel(ctx)

@@ -1,5 +1,3 @@
-from glob import glob
-from click import echo
 from modules.logger import logger
 import multiprocessing
 from tracemalloc import start
