@@ -1,8 +1,9 @@
 from discord.ext import commands
 import discord
-from main import PREFIX, audio
+from main import PREFIX, audio, getAudio
 import functions
-from modules.music import QueueMananger, MusicFetcher
+from modules.music import MusicFetcher
+from modules.music.QueueMananger import QueueMananger
 
 @commands.command(name="skip")
 async def skipSong(ctx, amount=1):
@@ -21,7 +22,7 @@ async def skipSong(ctx, amount=1):
         return
 
     #global audio
-    audio = discord.PCMVolumeTransformer(discord.FFmpegPCMAudio(QueueMananger().getQueue()[ctx.guild.id][0].url, executable="resources/ffmpeg.exe"), volume=MusicFetcher.voulme)
+    audio = discord.PCMVolumeTransformer(discord.FFmpegPCMAudio(QueueMananger().getQueue()[ctx.guild.id][0].url, executable="ffmpeg"), volume=getAudio().volume)
     voice.stop()
     voice.play(audio)
     await ctx.send('**{}** wird abgespielt. 🎶'.format(QueueMananger().getQueue()[ctx.guild.id][0].title))

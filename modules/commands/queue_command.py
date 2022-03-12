@@ -1,5 +1,5 @@
 from discord.ext import commands
-from modules.music import QueueMananger
+from modules.music.QueueMananger import QueueMananger
 import discord
 import main
 
