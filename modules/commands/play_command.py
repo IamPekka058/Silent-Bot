@@ -30,8 +30,7 @@ async def playSong(ctx, *args):
             #results = await music_fetcher.YTDLSource.from_url(variables.queue[ctx.guild.id][0].url, loop=bot.loop)
             #global audio
             #global currently_playing
-            id = ctx.guild.id
-            main.currently_playing = QueueMananger().removeSongFromQueue(id)
+            main.setCurrentlyPlaying(QueueMananger().removeSongFromQueue(ctx.guild.id))
             main.setAudio(discord.PCMVolumeTransformer(discord.FFmpegPCMAudio(results[0].url, executable="ffmpeg", options='-vn',), volume=main.volume))
             voice.play(source=main.getAudio())
             await ctx.send('**{}** wird abgespielt. 🎶'.format(main.currently_playing.title))

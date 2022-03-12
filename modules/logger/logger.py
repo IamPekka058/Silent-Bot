@@ -8,7 +8,7 @@ types = {
     }
 def log(type, msg):
     time = datetime.datetime.now()
-    with open(path.join(__file__, "..", "..","..", "logs", "log"+str(time.strftime("%m%d%Y")+".txt")), "a+") as file:
+    with open("/logs/"+"log"+str(time.strftime("%m%d%Y")+".txt"), "a+") as file:
         file.write("["+time.strftime("%H:%M:%S")+"] "+types[type]+msg+"\n")
         file.flush()
         file.close()
