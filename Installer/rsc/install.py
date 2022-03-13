@@ -59,7 +59,7 @@ def install():
     if(os_name == "Linux"):
         if(getFFmpeg() == False):
             print("Installing FFmpeg for Linux...")
-            p = subprocess.Popen("sudo apt-get install ffmpeg", stdout=subprocess.PIPE, stderr=subprocess.PIPE, shell=True)
+            p = subprocess.Popen("sudo apt-get install ffmpeg -y", stdout=subprocess.PIPE, stderr=subprocess.PIPE, shell=True)
             p.wait()
             print("Installed FFmpeg for Linux")
         print("Downloading Silent-Bot...")
