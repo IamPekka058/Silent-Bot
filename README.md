@@ -1,7 +1,8 @@
 # Silent-Bot
+[![stars - Silent-Bot](https://img.shields.io/github/stars/IamPekka058/Silent-Bot?style=social)](https://github.com/IamPekka058/Silent-Bot)
+[![forks - Silent-Bot](https://img.shields.io/github/forks/IamPekka058/Silent-Bot?style=social)](https://github.com/IamPekka058/Silent-Bot/)
 
 Silent-Bot is an open source Discord-Bot.
-
 
 ## Setup
 
