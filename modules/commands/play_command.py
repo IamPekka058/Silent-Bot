@@ -10,7 +10,6 @@ import main
 
 @commands.command(name="play", desciption="Spiele Musik von YouTube")
 async def playSong(ctx, *args):
-    logger.log(2, "Song wird abgespielt")
     voice = ctx.guild.voice_client
     if(voice == None):
         await joinVoiceChannel(ctx)
@@ -28,14 +27,12 @@ async def playSong(ctx, *args):
         if(voice.is_playing()):
             await ctx.send("**{}** Song/s wurde/n der Warteschlange ⏳ hinzugefügt.".format(len(results)))
         else:
-            await ctx.send("**{}** Songs wurde/n gefunden. 🔍".format(len(results)))
-            #results = await music_fetcher.YTDLSource.from_url(variables.queue[ctx.guild.id][0].url, loop=bot.loop)
-            #global audio
-            #global currently_playing
+            await ctx.send("**{}** Song/s wurde/n gefunden. 🔍".format(len(results)))
             main.setCurrentlyPlaying(QueueMananger().removeSongFromQueue(ctx.guild.id))
-            main.setAudio(discord.PCMVolumeTransformer(discord.FFmpegPCMAudio(results[0].url, executable="ffmpeg", options='-vn',), volume=main.volume))
+            main.setAudio(discord.PCMVolumeTransformer(discord.FFmpegPCMAudio(results[0].url, executable="ffmpeg", options='-vn', before_options="-reconnect 1 -reconnect_streamed 1 -reconnect_delay_max 5"), volume=main.volume))
             voice.play(source=main.getAudio())
             await ctx.send('**{}** wird abgespielt. 🎶'.format(main.currently_playing.title))
+            logger.log(2, "Song wird abgespielt")
 
     except youtube_dl.DownloadError as err:
         await ctx.send("ERROR -> "+str(err.args))

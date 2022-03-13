@@ -2,3 +2,5 @@ discord.py
 discord.py[voice]
 youtube_dl
 flask
+requests
+gitpython
