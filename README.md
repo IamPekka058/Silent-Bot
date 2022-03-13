@@ -4,13 +4,12 @@ Silent-Bot is an open source Discord-Bot.
 
 
 ## Setup
-1. [Download](https://github.com/IamPekka058/Silent-Bot/archive/refs/heads/development.zip) the project.
 
-2. Install the dependencies with ```pip install -r requirements.txt```
+### Silent-Bot Installer
 
-3. Update the [config.json](https://github.com/IamPekka058/Silent-Bot/blob/development/config.json) in your directory.
-
-4. Run ```python main.py```
+1. [Download](https://github.com/IamPekka058/Silent-Bot/releases/download/pre/Installer.zip) the Installer.
+2. Run the installer with ```python install.py```
+DONE.
 
 ## Webservice
 You can enbale the webservice in the config.json. The Webservice is by default disabled.
