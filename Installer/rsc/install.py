@@ -16,10 +16,10 @@ def getFFmpeg():
     p = subprocess.Popen("ffmpeg", stdout=subprocess.PIPE, stderr=subprocess.PIPE, shell=True)
     p.wait()
     if(p.returncode == 1):
-        print("An FFmpeg Installation was found\n")
+        print("An FFmpeg Installation was found")
         return True
     else:
-        print("No FFmpeg Installation was found\n")
+        print("No FFmpeg Installation was found")
         return False
 
 def getgit():
@@ -42,17 +42,17 @@ def install():
 
             with open("ffmpeg.zip", "wb+") as download_file:
                 download_file.write(result.content)
-            print("Successfully downloaded ffmpeg.zip\n")
+            print("Successfully downloaded ffmpeg.zip")
             print("\u001b[37mExtracting content..."+colors['white'])
             zipfile.ZipFile("ffmpeg.zip").extractall("ffmpeg/")
-            print("Successfully extracted to ffmpeg/\n")
+            print("Successfully extracted to ffmpeg/")
             print("Deleting ffmpeg.zip...")
             os.remove("ffmpeg.zip")
-            print("Successfully deleted ffmpeg.zip\n")
+            print("Successfully deleted ffmpeg.zip")
             file_path = os.path.dirname(os.path.abspath("ffmpeg/ffmpeg-master-latest-win64-gpl/ffmpeg.exe"))
             print("Adding FFmpeg to path variable...")
             os.environ["PATH"] += file_path 
-            print("Successfully added FFmpeg to path variable\n")
+            print("Successfully added FFmpeg to path variable")
         print("Downloading Silent-Bot...")
         try:
             git.Git(os.path.dirname(os.path.abspath("Installer/"))).clone("git://github.com/IamPekka058/Silent-Bot.git")
