@@ -22,10 +22,25 @@ def getFFmpeg():
         print("No FFmpeg Installation was found\n")
         return False
 
+def getgit():
+    p = subprocess.Popen("git", stdout=subprocess.PIPE, stderr=subprocess.PIPE, shell=True)
+    p.wait()
+    if(p.returncode == 1):
+        return True
+    else:
+        print("Git is not installed.")
+        return False
+
 def install():
     os_name = platform.system()
     
     if(os_name == "Windows"):
+
+        if not getgit:
+            print("Installing...")
+            p = subprocess.Popen("sudo apt-get install git", stdout=subprocess.PIPE, stderr=subprocess.PIPE, shell=True)
+            p.wait()
+            print("Git installed\n")
 
         if(getFFmpeg() == False):
             print("Downloading FFmpeg for Windows...")
@@ -53,8 +68,6 @@ def install():
 
         print(colors["green"]+"Installation done.\n"+colors["white"])
         exit()
-
-
 
     if(os_name == "Linux"):
         if(getFFmpeg() == False):
