@@ -12,14 +12,14 @@ def fetchData():
     links = json.loads(result.content)
 
 def getFFmpeg():
-    print("Searching for FFmpeg Installation...")
+    print("Searching for an FFmpeg Installation...")
     p = subprocess.Popen("ffmpeg", stdout=subprocess.PIPE, stderr=subprocess.PIPE, shell=True)
     p.wait()
     if(p.returncode == 1):
-        print("An FFmpeg Installation was found.\n")
+        print("An FFmpeg Installation was found\n")
         return True
     else:
-        print("No FFmpeg Installation was found...")
+        print("No FFmpeg Installation was found\n")
         return False
 
 def install():
@@ -46,36 +46,23 @@ def install():
             print("Successfully added FFmpeg to path variable\n")
         print("Downloading Silent-Bot...")
         git.Git("/").clone("git://github.com/IamPekka058/Silent-Bot.git")
-        print("Downloaded Silent-Bot\n")
+        print("Downloaded Silent-Bot")
 
-        print(colors["green"]+"Installation done."+colors["white"])
+        print(colors["green"]+"Installation done.\n"+colors["white"])
         exit()
 
 
 
     if(os_name == "Linux"):
         if(getFFmpeg() == False):
-            print("Downloading FFmpeg for Linux...")
-            result = requests.get(links.get("linux"))
-
-            with open("ffmpeg.tar.xz", "wb+") as download_file:
-                download_file.write(result.content)
-            print("Successfully downloaded ffmpeg.tar.xz\n")
-            print("\u001b[37mExtracting content..."+colors['white'])
-            with tarfile.open("ffmpeg.tar.xz") as tar_file:
-                tar_file.extractall("ffmpeg/")
-            print("Successfully extracted to ffmpeg/\n")
-            print("Deleting ffmpeg.tar.xz...")
-            os.remove("ffmpeg.tar.xz")
-            print("Successfully deleted ffmpeg.tar.xz\n")
-            file_path = os.path.dirname(os.path.abspath("ffmpeg/ffmpeg-master-latest-linux64-gpl/ffmpeg.exe"))
-            print("Adding FFmpeg to path variable...")
-            os.environ["PATH"] += file_path 
-            print("Successfully added FFmpeg to path variable\n")
+            print("Installing FFmpeg for Linux...")
+            p = subprocess.Popen("sudo apt-get install ffmpeg", stdout=subprocess.PIPE, stderr=subprocess.PIPE, shell=True)
+            p.wait()
+            print("Installed FFmpeg for Linux")
         print("Downloading Silent-Bot...")
-        git.Git("/").clone("git://github.com/IamPekka058/Silent-Bot.git")
-        print("Downloaded Silent-Bot\n")
-        print(colors["green"]+"Installation done."+colors["white"])
+        git.Git(os.path.dirname(os.path.abspath("Installer/"))).clone("git://github.com/IamPekka058/Silent-Bot.git")
+        print("Downloaded Silent-Bot")
+        print(colors["green"]+"Installation done.\n"+colors["white"])
         exit()
 
     print("Your OS is not supported.")
