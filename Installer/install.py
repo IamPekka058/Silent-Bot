@@ -1,10 +1,8 @@
 import subprocess, platform
 
-from rsc.install import fetchData, install
-
 def collectPackages():
     print("Collect packages...")
-    if(platform.system == "Linux"):
+    if(platform.system() == "Linux"):
         p = subprocess.Popen("sudo pip install -r -y requirements.txt", stdout=subprocess.PIPE, stderr=subprocess.PIPE, shell=True)
         p.wait()
         if(p.returncode != 1):
@@ -12,7 +10,19 @@ def collectPackages():
             p = subprocess.Popen("sudo apt-get install python3-pip", stdout=subprocess.PIPE, stderr=subprocess.PIPE, shell=True)
             p.wait()
             print("Pip installed\n")
-            collectPackages()
+        print("Searching for git...")
+        p = subprocess.Popen("git", stdout=subprocess.PIPE, stderr=subprocess.PIPE, shell=True)
+        p.wait()
+        if(p.returncode != 1):
+            print("Installing git...")
+            p = subprocess.Popen("sudo apt-get install git -y", stdout=subprocess.PIPE, stderr=subprocess.PIPE, shell=True)
+            p.wait()
+            print("Git installed\n")
+        else:
+            print("Git found")
+        from rsc.install import fetchData, install
+        fetchData()
+        install()
     else:
         p = subprocess.Popen("pip install -r -y requirements.txt", stdout=subprocess.PIPE, stderr=subprocess.PIPE, shell=True)
         p.wait()
@@ -20,6 +30,6 @@ def collectPackages():
 
 if __name__ == "__main__":
     collectPackages()
-    import rsc.install
+    from rsc.install import fetchData, install
     fetchData()
     install()

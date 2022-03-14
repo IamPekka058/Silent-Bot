@@ -22,15 +22,6 @@ def getFFmpeg():
         print("No FFmpeg Installation was found")
         return False
 
-def getgit():
-    p = subprocess.Popen("git", stdout=subprocess.PIPE, stderr=subprocess.PIPE, shell=True)
-    p.wait()
-    if(p.returncode == 1):
-        return True
-    else:
-        print("Git is not installed.")
-        return False
-
 def install():
     os_name = platform.system()
     
@@ -64,12 +55,6 @@ def install():
         exit()
 
     if(os_name == "Linux"):
-        if not getgit:
-            print("Installing...")
-            p = subprocess.Popen("sudo apt-get install git", stdout=subprocess.PIPE, stderr=subprocess.PIPE, shell=True)
-            p.wait()
-            print("Git installed\n")
-            
         if(getFFmpeg() == False):
             print("Installing FFmpeg for Linux...")
             p = subprocess.Popen("sudo apt-get install ffmpeg -y", stdout=subprocess.PIPE, stderr=subprocess.PIPE, shell=True)
@@ -79,6 +64,7 @@ def install():
         try:
             git.Git(os.path.dirname(os.path.abspath("Installer/"))).clone("git://github.com/IamPekka058/Silent-Bot.git")
         except:
+            print("Pull Updates...")
             git.Git(os.path.dirname(os.path.abspath("Installer/"))).pull()
         print("Downloaded Silent-Bot")
         print(colors["green"]+"Installation done.\n"+colors["white"])
