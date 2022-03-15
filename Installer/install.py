@@ -24,9 +24,15 @@ def collectPackages():
         from rsc.install import fetchData, install
         fetchData()
         install()
-    else:
+    if(platform.system() == "Windows"):
         p = subprocess.Popen("pip install -r -y requirements.txt", stdout=subprocess.PIPE, stderr=subprocess.PIPE, shell=True)
         p.wait()
+        
+        p = subprocess.Popen("git", stdout=subprocess.PIPE, stderr=subprocess.PIPE, shell=True)
+        p.wait()
+        if(p.returncode == -1):
+            print("Es wurde kein git gefunden... entweder installierst du es oder du wartest noch bis der Installer auch die Gitinstallation auf Windows unterstützt...")
+            exit()
     print("Collected all packages.")
 
 if __name__ == "__main__":
