@@ -10,6 +10,7 @@ def collectPackages():
             p = subprocess.Popen("sudo apt-get install python3-pip", stdout=subprocess.PIPE, stderr=subprocess.PIPE, shell=True)
             p.wait()
             print("Pip installed\n")
+            collectPackages()
         print("Searching for git...")
         p = subprocess.Popen("git", stdout=subprocess.PIPE, stderr=subprocess.PIPE, shell=True)
         p.wait()
