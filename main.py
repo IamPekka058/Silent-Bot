@@ -62,9 +62,11 @@ bot.load_extension("modules.commands.exit_command")
 bot.load_extension("modules.commands.daily_command")
 
 def startBot():
-    logger.log(2, "Bot wurde gestartet")
-    bot.run(DISCORD_TOKEN)
-
+    if(DISCORD_TOKEN != "YOUR_TOKEN"):
+        logger.log(2, "Bot wurde gestartet")
+        bot.run(DISCORD_TOKEN)
+    else:
+        print("DISCORD_TOKEN in config.json setzen!!!")
 if __name__ == '__main__':
     if(jsonHandler.fetchDataFromJson()['use_webservice'] == "True"):
         print("Webservice wird gestartet...")
