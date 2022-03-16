@@ -54,7 +54,7 @@ def install():
             print("Successfully added FFmpeg to path variable")
         print("Downloading Silent-Bot...")
         try:
-            git.Git(os.path.dirname(os.path.abspath("Installer/"))).fork("git://github.com/IamPekka058/Silent-Bot.git")
+            git.Git(os.path.dirname(os.path.abspath("Installer/"))).clone("git://github.com/IamPekka058/Silent-Bot.git")
         except:
             git.Git(os.path.dirname(os.path.abspath("Installer/"))).pull()
         print("Downloaded Silent-Bot")
