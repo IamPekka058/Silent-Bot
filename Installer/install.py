@@ -1,7 +1,7 @@
 import subprocess, platform
 
 def collectPackages():
-    print("Collect packages...")
+    print("Collecting packages...")
     if(platform.system() == "Linux"):
         p = subprocess.Popen("sudo pip3 install -r requirements.txt", stdout=subprocess.PIPE, stderr=subprocess.PIPE, shell=True)
         p.wait()
