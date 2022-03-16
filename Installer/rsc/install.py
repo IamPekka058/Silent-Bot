@@ -7,7 +7,11 @@ print(colors["green"]+"Welcome to the Silent-Bot Installer."+colors["white"]+"\n
 links = {}
 
 def fetchData():
-    result = requests.get("https://raw.githubusercontent.com/IamPekka058/Silent-Bot/development-iampekka058/builds.txt")
+    try:
+        result = requests.get("https://raw.githubusercontent.com/IamPekka058/Silent-Bot/development-iampekka058/builds.txt")
+    except:
+        print("No connection to the internet")
+        exit()
     global links
     links = json.loads(result.content)
 
@@ -29,7 +33,11 @@ def install():
 
         if(getFFmpeg() == False):
             print("Downloading FFmpeg for Windows...")
-            result = requests.get(links.get("windows"))
+            try:
+                result = requests.get(links.get("windows"))
+            except:
+                print("Could not connect to ffmpeg...")
+                exit()
 
             with open("ffmpeg.zip", "wb+") as download_file:
                 download_file.write(result.content)
@@ -46,7 +54,7 @@ def install():
             print("Successfully added FFmpeg to path variable")
         print("Downloading Silent-Bot...")
         try:
-            git.Git(os.path.dirname(os.path.abspath("Installer/"))).clone("git://github.com/IamPekka058/Silent-Bot.git")
+            git.Git(os.path.dirname(os.path.abspath("Installer/"))).fork("git://github.com/IamPekka058/Silent-Bot.git")
         except:
             git.Git(os.path.dirname(os.path.abspath("Installer/"))).pull()
         print("Downloaded Silent-Bot")
