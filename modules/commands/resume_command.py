@@ -1,4 +1,4 @@
-from discord.ext import commands
+from nextcord.ext import commands
 
 @commands.command(name="resume", description="Lässt die Musikwiedergabe wieder abspielen")
 async def resumeMusic(ctx):

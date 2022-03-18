@@ -1,4 +1,4 @@
-from discord.ext import commands
+from nextcord.ext import commands
 from modules.json import jsonHandler
 from modules.commands.play_command import playSong
 from modules.music import MusicFetcher

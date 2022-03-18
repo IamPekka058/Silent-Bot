@@ -1,4 +1,4 @@
-from discord.ext import commands
+from nextcord.ext import commands
 
 @commands.command(name="join", help="Let the bot join your voicechannel")
 async def joinVoiceChannel(ctx):

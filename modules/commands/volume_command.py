@@ -1,4 +1,4 @@
-from discord.ext import commands
+from nextcord.ext import commands
 import main
 
 @commands.command(name="volume", description="Ändere die Lautstärke des Bots für alle.")

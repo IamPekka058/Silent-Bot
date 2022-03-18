@@ -1,4 +1,4 @@
-from discord.ext import commands
+from nextcord.ext import commands
 
 @commands.command(name="stop", description="Stoppt Musikwiedergabe")
 async def stopMusic(ctx):

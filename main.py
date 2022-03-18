@@ -1,12 +1,11 @@
 from modules.logger import logger
 import multiprocessing
-from tracemalloc import start
 from objects.Song import Song
 import functions
 from modules.music.QueueMananger import QueueMananger
 import modules.json.jsonHandler as jsonHandler
-import discord
-from discord.ext import commands
+import nextcord
+from nextcord.ext import commands
 import youtube_dl
 import resources.oauth as oauth
 import modules
@@ -19,8 +18,8 @@ currently_playing = None
 audio = None
 volume = 0.05
 
-intents = discord.Intents().default()
-client = discord.Client(intents=intents)
+intents = nextcord.Intents().default()
+client = nextcord.Client(intents=intents)
 bot = commands.Bot(command_prefix=PREFIX,intents=intents)
 
 def setAudio(newAudio):
@@ -62,9 +61,11 @@ bot.load_extension("modules.commands.exit_command")
 bot.load_extension("modules.commands.daily_command")
 
 def startBot():
-    logger.log(2, "Bot wurde gestartet")
-    bot.run(DISCORD_TOKEN)
-
+    if(DISCORD_TOKEN != "YOUR_TOKEN"):
+        logger.log(2, "Bot wurde gestartet")
+        bot.run(DISCORD_TOKEN)
+    else:
+        print("DISCORD_TOKEN in config.json setzen!!!")
 if __name__ == '__main__':
     if(jsonHandler.fetchDataFromJson()['use_webservice'] == "True"):
         print("Webservice wird gestartet...")

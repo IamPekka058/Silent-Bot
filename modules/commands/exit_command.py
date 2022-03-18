@@ -1,4 +1,4 @@
-from discord.ext import commands
+from nextcord.ext import commands
 from modules.commands.stop_command import stopMusic
 from main import bot
 

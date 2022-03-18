@@ -1,5 +1,5 @@
-from discord.ext import commands
-import discord
+from nextcord.ext import commands
+import nextcord
 import youtube_dl
 from modules.logger import logger
 from modules.commands.join_command import joinVoiceChannel
@@ -29,7 +29,7 @@ async def playSong(ctx, *args):
         else:
             await ctx.send("**{}** Song/s wurde/n gefunden. 🔍".format(len(results)))
             main.setCurrentlyPlaying(QueueMananger().removeSongFromQueue(ctx.guild.id))
-            main.setAudio(discord.PCMVolumeTransformer(discord.FFmpegPCMAudio(results[0].url, executable="ffmpeg", options='-vn', before_options="-reconnect 1 -reconnect_streamed 1 -reconnect_delay_max 5"), volume=main.volume))
+            main.setAudio(nextcord.PCMVolumeTransformer(nextcord.FFmpegPCMAudio(results[0].url, executable="ffmpeg", options='-vn', before_options="-reconnect 1 -reconnect_streamed 1 -reconnect_delay_max 5"), volume=main.volume))
             voice.play(source=main.getAudio())
             await ctx.send('**{}** wird abgespielt. 🎶'.format(main.currently_playing.title))
             logger.log(2, "Song wird abgespielt")

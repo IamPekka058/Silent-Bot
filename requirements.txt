@@ -1,5 +1,5 @@
-discord.py
-discord.py[voice]
+nextcord[voice]
 youtube_dl
 flask
 requests
+gitpython
