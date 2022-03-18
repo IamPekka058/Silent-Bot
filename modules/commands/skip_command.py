@@ -1,5 +1,5 @@
-from discord.ext import commands
-import discord
+from nextcord.ext import commands
+import nextcord
 from main import PREFIX, audio, getAudio, setCurrentlyPlaying
 import functions
 from modules.music import MusicFetcher
@@ -22,7 +22,7 @@ async def skipSong(ctx, amount=1):
         return
 
     #global audio
-    audio = discord.PCMVolumeTransformer(discord.FFmpegPCMAudio(QueueMananger().getQueue()[ctx.guild.id][0].url, executable="ffmpeg"), volume=getAudio().volume)
+    audio = nextcord.PCMVolumeTransformer(nextcord.FFmpegPCMAudio(QueueMananger().getQueue()[ctx.guild.id][0].url, executable="ffmpeg"), volume=getAudio().volume)
     voice.stop()
     voice.play(audio)
     await ctx.send('**{}** wird abgespielt. 🎶'.format(QueueMananger().getQueue()[ctx.guild.id][0].title))

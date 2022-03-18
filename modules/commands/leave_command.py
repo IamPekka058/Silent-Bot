@@ -1,4 +1,4 @@
-from discord.ext import commands
+from nextcord.ext import commands
 
 @commands.command(name="leave", help="Der Bot verlässt den Sprachkanal")
 async def leaveVoiceChannel(ctx):
