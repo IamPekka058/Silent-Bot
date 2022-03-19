@@ -6,6 +6,7 @@ from modules.music.QueueMananger import QueueMananger
 import modules.json.jsonHandler as jsonHandler
 import nextcord
 from nextcord.ext import commands
+from nextcord import Interaction, InteractionType
 import youtube_dl
 import resources.oauth as oauth
 import modules
@@ -36,7 +37,6 @@ def setCurrentlyPlaying(playing):
     global currently_playing
     currently_playing = playing
 
-
 @bot.event
 async def on_message(message):
     try:
@@ -44,10 +44,10 @@ async def on_message(message):
         await bot.process_commands(message)
     except:
         print("Error")
+
 #                       #
 #    Load Extensions    #
 #                       # 
-
 bot.load_extension("modules.commands.join_command")
 bot.load_extension("modules.commands.skip_command")
 bot.load_extension("modules.commands.leave_command")
@@ -59,6 +59,7 @@ bot.load_extension("modules.commands.pause_command")
 bot.load_extension("modules.commands.stop_command")
 bot.load_extension("modules.commands.exit_command")
 bot.load_extension("modules.commands.daily_command")
+bot.load_extension("modules.cogs.Moderation")
 
 def startBot():
     if(DISCORD_TOKEN != "YOUR_TOKEN"):
@@ -74,7 +75,7 @@ if __name__ == '__main__':
 
     bot_process = proc = multiprocessing.Process(target=startBot)
     bot_process.start()
-    #bot.run(DISCORD_TOKEN)
+    
     print("Bot gestartet...")
     print("Now listening to commands...")
     while(True):
