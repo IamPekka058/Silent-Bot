@@ -1,8 +1,6 @@
-def hasRole(role, user):
-    if(user.hasPermission()):
-        return True
-    else:
-        return False
+from discord import Interaction
+
+
 
 async def sendSyntaxErrorMessage(ctx, cmd, syntax):
     await ctx.send(cmd + " " + syntax)

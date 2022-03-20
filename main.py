@@ -60,6 +60,7 @@ bot.load_extension("modules.commands.stop_command")
 bot.load_extension("modules.commands.exit_command")
 bot.load_extension("modules.commands.daily_command")
 bot.load_extension("modules.cogs.Moderation")
+bot.load_extension("modules.cogs.Music")
 
 def startBot():
     if(DISCORD_TOKEN != "YOUR_TOKEN"):

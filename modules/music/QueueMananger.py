@@ -1,8 +1,8 @@
 queue = {}
 
 class QueueMananger():
-    def addSongToQueue(guild, song):
-        id = guild.id
+    def addSongToQueue(guild_id, song):
+        id = guild_id
         #Check if a queue exists for guild
         try: 
             songs = queue[id]

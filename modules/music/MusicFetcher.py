@@ -43,15 +43,7 @@ class YTDLSource(discord.PCMVolumeTransformer):
         if (Converter.isPlaylist(info)):
             for entrie in info['entries']:
                 return_list.append(Song(entrie['title'], Converter.getUrl(entrie)))
-            with open("temp_list.txt", "w") as file:
-                file.write(json.dumps(info))
-                file.flush()
-                file.close()
         else:
-            with open("temp.txt", "w") as file:
-                file.write(json.dumps(info))
-                file.flush()
-                file.close()
             url_val = info['formats'][0]['url']
             title = info['title']
             return_list.append(Song(title, url_val))

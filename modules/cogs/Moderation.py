@@ -6,7 +6,7 @@ class Moderation(commands.Cog):
     def __init(self, bot):
         self.bot = bot
     
-    @nextcord.slash_command(name="clear", guild_ids=[946172925285916673])
+    @nextcord.slash_command(name="clear", description="Deletes the given amount of messages.")
     async def clearChat(self, interaction: Interaction, amount):
         try:
             num = int(amount)

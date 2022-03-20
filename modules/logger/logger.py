@@ -2,6 +2,7 @@ import datetime
 from os import path
 
 types = {
+    0:"[FEHLER] ",
     1:"[WARNUNG] ",
     2:"[INFO] ",
     3:"[DISCORD] "
